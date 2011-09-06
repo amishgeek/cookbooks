@@ -1,0 +1,28 @@
+= DESCRIPTION:
+Install and Configure nginx.
+
+
+= REQUIREMENTS:
+
+= ATTRIBUTES:
+Concepts & Code borrowed from Opscode apache2 and nginx cookbooks, and hopefully improved upon.
+= USAGE:
+
+
+
+nginx_site "domain.com" do
+  aliases [
+      "domain.com",
+      "*.domain.com"
+    ]
+  docroot "#{node[:nginx][:web_root]}/domain.com"
+  user "#{node[:nginx][:user]}"
+  group "#{node[:nginx][:group]}"
+  conf_template "vhost.conf.erb"
+  conf_extras [
+      "# Extra nginx conf 1",
+      "# Extra nginx conf 2"
+    ]
+  cookbook "nginx"
+    action [ :create, :enable ]
+end

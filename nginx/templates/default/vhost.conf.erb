@@ -1,0 +1,25 @@
+#### <%= @site_name %>
+
+server {
+	listen 80;
+	server_name <% @site_aliases.each do |a| %><%= "#{a}" %> <% end %>;
+	
+	access_log <%= node[:nginx][:log_dir] %>/<%= @site_name %>-access.log;
+	error_log <%= node[:nginx][:log_dir] %>/<%= @site_name %>-error.log warn;
+	
+	root <%= @site_docroot %>;
+	
+	<% @site_extras.each do |extra| %>
+	<%= "#{extra}" %>
+	<% end %>
+	
+	location / {
+		try_files $uri $uri/ /index.php?q=$uri&$args;
+	}
+	
+	location ~ \.php
+	{
+		fastcgi_pass 127.0.0.1:9000;
+		fastcgi_index index.php;
+	}
+}

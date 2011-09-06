@@ -1,0 +1,18 @@
+server {
+  listen   80 default_server;
+  server_name  <%= node[:hostname] %>;
+
+  access_log  <%= node[:nginx][:log_dir] %>/localhost.access.log;
+
+	root   <%= node[:nginx][:web_root] %>/default;
+
+	location / {
+		try_files $uri $uri/ /index.php?q=$uri&$args;
+	}
+	
+	location ~ \.php
+	{
+		fastcgi_pass 127.0.0.1:9000;
+		fastcgi_index index.php;
+	}
+}
